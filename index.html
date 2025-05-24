@@ -1,54 +1,14 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>IRCC Express Entry Draw Tracker</title>
-  <style>
-    body { font-family: sans-serif; background: #f4f4f4; padding: 10px; }
-    .tile { background: #fff; border-left: 8px solid #3a7; margin: 10px 0; padding: 10px; box-shadow: 0 0 5px #ccc; }
-    .tile.program-specific { border-color: #39f; }
-    .tile.category-based { border-color: #f90; }
-    .tile.technical { border-color: #f33; }
-    .tile h3 { margin: 0; font-size: 18px; }
-    .tile p { margin: 5px 0; }
-    .tile a { color: #06c; text-decoration: none; }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IRCC News Feed Tracker</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <h1>IRCC Express Entry Dashboard</h1>
-  <div id="draws"></div>
-
-  <script>
-    async function fetchDraws() {
-      const response = await fetch("https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html");
-      const text = await response.text();
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(text, 'text/html');
-      const drawTiles = document.getElementById("draws");
-
-      const drawSections = doc.querySelectorAll('.mw-parser-output > h3');
-      drawSections.forEach(header => {
-        const date = header.textContent.trim();
-        const ul = header.nextElementSibling;
-        const details = ul ? ul.querySelectorAll('li') : [];
-        const tile = document.createElement("div");
-        tile.className = "tile";
-
-        let content = `<h3>${date}</h3>`;
-        details.forEach(li => {
-          const line = li.textContent.trim();
-          content += `<p>${line}</p>`;
-          if (line.includes("Provincial Nominee")) tile.classList.add("program-specific");
-          if (line.includes("category")) tile.classList.add("category-based");
-        });
-
-        content += `<p><a href="https://www.canada.ca${header.querySelector('a')?.getAttribute('href') || ''}" target="_blank">View on IRCC</a></p>`;
-        tile.innerHTML = content;
-        drawTiles.appendChild(tile);
-      });
-    }
-
-    fetchDraws();
-  </script>
+  <h1>IRCC Newsroom Dashboard</h1>
+  <div id="tiles-container">Loading updates...</div>
+  <script src="script.js"></script>
 </body>
 </html>
